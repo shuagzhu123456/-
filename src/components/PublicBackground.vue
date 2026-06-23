@@ -58,10 +58,8 @@ defineEmits(["title-click"]);
 /* 公共面板外壳：负责统一背景与基础内边距 */
 .public-panel {
 	position: absolute;
-	top: 109px;
-	left: 10px;
 	width: 508px;
-	height: 99%;
+	height: 101%;
 	padding: 8px;
 	box-sizing: border-box;
 	background-repeat: no-repeat;

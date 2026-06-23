@@ -38,12 +38,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits([
-	"update:title",
-	"update:timeValue",
-	"background-load",
-	"background-error",
-]);
+const emit = defineEmits(["update:title", "update:timeValue", "background-load", "background-error"]);
 
 // 标题模型：统一处理标题展示与 v-model 兼容
 const titleModel = computed({
@@ -74,12 +69,7 @@ const handleBackgroundError = (event) => {
 
 <template>
 	<div v-if="backgroundSrc" class="screen-header-bg">
-		<img
-			:src="backgroundSrc"
-			:alt="backgroundAlt"
-			@load="handleBackgroundLoad"
-			@error="handleBackgroundError"
-		/>
+		<img :src="backgroundSrc" :alt="backgroundAlt" @load="handleBackgroundLoad" @error="handleBackgroundError" />
 	</div>
 
 	<div class="screen-canvas" :style="canvasStyle">
@@ -104,7 +94,6 @@ const handleBackgroundError = (event) => {
 	left: 0;
 	z-index: 0;
 	width: 100%;
-	height: 109px;
 	pointer-events: none;
 
 	img {
@@ -127,7 +116,6 @@ const handleBackgroundError = (event) => {
 /* 头部容器：约束标题与时间区域的定位 */
 .screen-header {
 	position: relative;
-	height: 109px;
 }
 
 /* 主标题：位于头部中轴区域 */
@@ -136,7 +124,7 @@ const handleBackgroundError = (event) => {
 	top: 18px;
 	left: 50%;
 	transform: translateX(-50%);
-	font-size: 38px;
+	font-size: 30px;
 	font-weight: 700;
 	line-height: 1.2;
 	letter-spacing: 2px;
