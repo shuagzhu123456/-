@@ -2,9 +2,6 @@
 import { computed, ref } from "vue";
 import leftModuleImage from "@/assets/t-001.png";
 import leftPanelBg from "@/assets/lift-bj2x.png";
-import stepActiveCardBg from "@/assets/d3-2.png";
-import stepCardBg from "@/assets/d3-1.png";
-import stepConfirmIcon from "@/assets/d3-queren.png";
 import stepDownloadIcon from "@/assets/d3-xiaza.png";
 import stepInflateIcon from "@/assets/d3-jieya.png";
 import stepValidateIcon from "@/assets/d3-jiaoyan.png";
@@ -13,6 +10,7 @@ import stepStorageIcon from "@/assets/de-xixinz.png";
 import topBg from "@/assets/top.png";
 import Module_1 from "@/components/Module_1.vue";
 import Module_2 from "@/components/Module_2.vue";
+import Module_3 from "@/components/Module_3.vue";
 import PublicBackground from "@/components/PublicBackground.vue";
 import titleIcon from "@/assets/top-c1.png";
 import titleBg from "@/assets/xiaobut-1.png";
@@ -72,7 +70,7 @@ const ruleMonitorList = [
 // 第三模块当前步骤：后续直接由接口返回当前进行到第几步
 const currentBatchStep = ref(4);
 
-// 第三模块基础步骤：只描述固定业务步骤与图标
+// 第三模块固定步骤：只描述业务步骤和图标
 const batchProgressBaseSteps = [
 	{
 		key: "receive",
@@ -106,21 +104,24 @@ const batchProgressBaseSteps = [
 	},
 ];
 
-// 第三模块显示步骤：根据当前步骤自动推导已完成、高亮、未开始状态
+// 第三模块显示步骤：根据当前步骤自动推导完成态与高亮态
 const batchProgressSteps = computed(() =>
 	batchProgressBaseSteps.map((step) => ({
 		...step,
 		completed: step.step < currentBatchStep.value,
 		active: step.step === currentBatchStep.value,
-		cardBackground: step.step === currentBatchStep.value ? stepActiveCardBg : stepCardBg,
 	})),
 );
 
-// 第三模块进度条：当前先按步骤占比换算，后续可直接替换为接口进度值
+// 第三模块进度值：当前先按步骤占比换算，后续可直接替换为接口进度
 const batchProgressValue = computed(() => Math.round((currentBatchStep.value / batchProgressBaseSteps.length) * 100));
 
 // 第三模块批次与时间：先用静态数据占位
+const batchProgressTitle = "批次处理进度看板";
 const currentBatchLabel = "当前批次:2026年度春季补贴数据";
+const batchProgressLabel = "处理进度";
+const batchStartLabel = "开始时间:";
+const batchEndLabel = "完成时间:";
 const batchStartTime = "2026-05-31 20:15:02";
 const batchEndTime = "2026-05-31 20:15:02";
 
@@ -161,51 +162,16 @@ const screenTransform = computed(() => ({
 							:list="ruleMonitorList" />
 
 						<!-- 第三模块：批次处理进度看板 -->
-						<div class="batch-progress">
-							<div class="batch-progress__title">
-								<span class="batch-progress__triangle"></span>
-								<span class="batch-progress__title-text">批次处理进度看板</span>
-								<span class="batch-progress__current">{{ currentBatchLabel }}</span>
-							</div>
-
-							<div class="batch-progress__steps">
-								<template v-for="(step, index) in batchProgressSteps" :key="step.key">
-									<div class="batch-progress__step">
-										<div class="batch-progress__step-card" :class="{ 'batch-progress__step-card--active': step.active }" :style="{ backgroundImage: `url(${step.cardBackground})` }">
-											<img class="batch-progress__step-icon" :src="step.icon" alt="" />
-											<img v-if="step.completed" class="batch-progress__step-check" :src="stepConfirmIcon" alt="" />
-										</div>
-										<div class="batch-progress__step-label">{{ step.label }}</div>
-									</div>
-
-									<div v-if="index < batchProgressSteps.length - 1" class="batch-progress__step-arrow">&gt;</div>
-								</template>
-							</div>
-
-							<div class="batch-progress__divider"></div>
-
-							<div class="batch-progress__bar-row">
-								<div class="batch-progress__bar-label">处理进度</div>
-								<div class="batch-progress__bar-track">
-									<div class="batch-progress__bar-fill" :style="{ width: `${batchProgressValue}%` }"></div>
-								</div>
-								<div class="batch-progress__bar-value">{{ batchProgressValue }}%</div>
-							</div>
-
-							<div class="batch-progress__time-row">
-								<div class="batch-progress__time-item">
-									<img class="batch-progress__time-icon" :src="stepConfirmIcon" alt="" />
-									<span>开始时间:{{ batchStartTime }}</span>
-								</div>
-
-								<div class="batch-progress__time-divider"></div>
-
-								<div class="batch-progress__time-item">
-									<img class="batch-progress__time-icon" :src="stepConfirmIcon" alt="" />
-									<span>完成时间:{{ batchEndTime }}</span>
-								</div>
-							</div>
-						</div>
+						<Module_3
+							:title="batchProgressTitle"
+							:current-batch-label="currentBatchLabel"
+							:steps="batchProgressSteps"
+							:progress-label="batchProgressLabel"
+							:progress-value="batchProgressValue"
+							:start-label="batchStartLabel"
+							:start-time="batchStartTime"
+							:end-label="batchEndLabel"
+							:end-time="batchEndTime" />
 					</PublicBackground>
 				</div>
 			</div>
@@ -256,177 +222,5 @@ const screenTransform = computed(() => ({
 	position: absolute;
 	top: 109px;
 	left: 10px;
-}
-
-/* 第三模块：批次处理进度看板 */
-.batch-progress {
-	width: 460px;
-	margin: 10px auto 0;
-}
-
-/* 第三模块标题行 */
-.batch-progress__title {
-	display: flex;
-	align-items: center;
-	height: 30px;
-	margin-left: 20px;
-}
-
-.batch-progress__triangle {
-	width: 0;
-	height: 0;
-	margin-right: 10px;
-	border-top: 8px solid transparent;
-	border-bottom: 8px solid transparent;
-	border-left: 14px solid #42b8ff;
-	filter: drop-shadow(0 0 8px rgba(66, 184, 255, 0.28));
-}
-
-.batch-progress__title-text {
-	font-size: 17px;
-	font-weight: 700;
-	letter-spacing: 0.5px;
-	color: #68caff;
-	text-shadow: 0 0 8px rgba(46, 185, 255, 0.3);
-}
-
-.batch-progress__current {
-	margin-left: 12px;
-	font-size: 13px;
-	color: rgba(239, 247, 255, 0.72);
-}
-
-/* 第三模块步骤流 */
-.batch-progress__steps {
-	display: flex;
-	align-items: flex-start;
-	margin-top: 16px;
-}
-
-.batch-progress__step {
-	width: 87px;
-}
-
-.batch-progress__step-card {
-	position: relative;
-	width: 79px;
-	height: 85px;
-	margin: 0 auto;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 100% 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.batch-progress__step-card--active {
-	filter: drop-shadow(0 0 12px rgba(76, 163, 255, 0.28));
-}
-
-.batch-progress__step-icon {
-	display: block;
-	max-width: 43px;
-	max-height: 46px;
-}
-
-.batch-progress__step-check {
-	position: absolute;
-	right: -2px;
-	bottom: -2px;
-	width: 22px;
-	height: 22px;
-}
-
-.batch-progress__step-label {
-	margin-top: 10px;
-	font-size: 12px;
-	line-height: 1.1;
-	text-align: center;
-	color: rgba(239, 247, 255, 0.9);
-	white-space: nowrap;
-}
-
-.batch-progress__step-arrow {
-	width: 22px;
-	padding-top: 30px;
-	font-size: 24px;
-	line-height: 1;
-	text-align: center;
-	color: rgba(239, 247, 255, 0.7);
-}
-
-/* 第三模块分隔线 */
-.batch-progress__divider {
-	margin-top: 14px;
-	border-bottom: 1px solid #002f5d;
-}
-
-/* 第三模块进度条 */
-.batch-progress__bar-row {
-	display: grid;
-	grid-template-columns: auto 1fr auto;
-	align-items: center;
-	gap: 14px;
-	margin-top: 18px;
-}
-
-.batch-progress__bar-label {
-	font-size: 13px;
-	font-weight: 600;
-	color: rgba(239, 247, 255, 0.86);
-}
-
-.batch-progress__bar-track {
-	position: relative;
-	height: 22px;
-	border-radius: 14px;
-	background: rgba(30, 70, 130, 0.46);
-	overflow: hidden;
-}
-
-.batch-progress__bar-fill {
-	height: 100%;
-	border-radius: 14px;
-	background: linear-gradient(90deg, #1a7fff 0%, #26a8ff 100%);
-	box-shadow: 0 0 12px rgba(38, 168, 255, 0.28);
-}
-
-.batch-progress__bar-value {
-	font-size: 16px;
-	font-weight: 700;
-	color: #5eb7ff;
-}
-
-/* 第三模块时间区域 */
-.batch-progress__time-row {
-	display: grid;
-	grid-template-columns: 1fr auto 1fr;
-	align-items: center;
-	height: 46px;
-	margin-top: 18px;
-	padding: 0 16px;
-	border: 1px solid rgba(29, 125, 255, 0.22);
-	border-radius: 6px;
-	background: rgba(5, 19, 43, 0.26);
-}
-
-.batch-progress__time-item {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	font-size: 11px;
-	color: rgba(239, 247, 255, 0.78);
-}
-
-.batch-progress__time-icon {
-	width: 18px;
-	height: 18px;
-}
-
-.batch-progress__time-divider {
-	width: 1px;
-	height: 16px;
-	background: rgba(29, 125, 255, 0.22);
 }
 </style>
