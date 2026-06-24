@@ -2,7 +2,6 @@
 import { computed, ref } from "vue";
 import leftPanelBg from "@/assets/lift-bj2x.png";
 import leftModuleImage from "@/assets/t-001.png";
-import rightLifecycleBg from "@/assets/r-1coen-bj.png";
 import stepDesensitizeIcon from "@/assets/d3-tuomi.png";
 import stepDownloadIcon from "@/assets/d3-xiaza.png";
 import stepInflateIcon from "@/assets/d3-jieya.png";
@@ -16,6 +15,9 @@ import Module_1 from "@/components/Module_1.vue";
 import Module_2 from "@/components/Module_2.vue";
 import Module_3 from "@/components/Module_3.vue";
 import PublicBackground from "@/components/PublicBackground.vue";
+import RightModule_1 from "@/components/rightModule_1.vue";
+import RightModule_2 from "@/components/rightModule_2.vue";
+import RightModule_3 from "@/components/rightModule_3.vue";
 import ScreenHeader from "@/components/screen/ScreenHeader.vue";
 import { useClock } from "@/composables/useClock";
 import { useScreenScale } from "@/composables/useScreenScale";
@@ -42,10 +44,10 @@ const leftModuleFlowList = [
 	{ key: "database", label: "确权基础地块库", className: "left-panel__flow-label--database" },
 ];
 
-// 左侧第二模块：规则引擎监控
+// 左侧第二模块：智能清洗规则引擎监控
 const ruleMonitorTitle = "智能清洗规则引擎监控";
 const ruleMonitorScoreLabel = "本期数据质量评分";
-const ruleMonitorScore = 60;
+const ruleMonitorScore = 80;
 const ruleMonitorStatusLabel = "数据质量：";
 const ruleMonitorStatusText = "优秀";
 const ruleMonitorList = [
@@ -58,8 +60,8 @@ const ruleMonitorList = [
 	{ id: 7, time: "[10:12:46]", messageLine1: "自动识别并修正口径差异", messageLine2: "地块样本 14 条" },
 ];
 
-// 左侧第三模块：批次处理进度
-const currentBatchStep = ref(4);
+// 左侧第三模块：批次处理进度看板
+const currentBatchStep = ref(2);
 const batchProgressBaseSteps = [
 	{ key: "receive", step: 1, icon: stepDownloadIcon, label: "1.文件接收" },
 	{ key: "inflate", step: 2, icon: stepInflateIcon, label: "2.自动解压" },
@@ -85,7 +87,9 @@ const batchEndTime = "2026-05-31 20:15:02";
 
 // 右侧第一模块：土地抵押全生命周期管理
 const rightLifecycleTitle = "土地抵押全生命周期管理";
+const rightLifecycleTotalLabel = "合计:";
 const rightLifecycleTotal = "89,466";
+const rightLifecycleUnit = "笔";
 const rightLifecycleList = [
 	{ key: "verified", label: "已核验", value: "28,756", percent: "32.1%", colorClass: "right-lifecycle__value--blue" },
 	{ key: "registering", label: "抵押登记中", value: "28,756", percent: "32.1%", colorClass: "right-lifecycle__value--cyan" },
@@ -93,7 +97,28 @@ const rightLifecycleList = [
 	{ key: "released", label: "解押完成", value: "28,756", percent: "32.1%", colorClass: "right-lifecycle__value--purple" },
 ];
 
-// 页面缩放：保持 1920x1080 大屏适配
+// 右侧第二模块：主动式风险预警推送
+const rightPushTitle = "主动式风险预警推送(实时)";
+const rightPushMoreText = "更多";
+const rightPushList = [
+	{ id: 1, type: "warning", message: "[预警]客户“张”名下土地发生流转变更，已推送至建行", time: "15:29:18" },
+	{ id: 2, type: "risk", message: "[风控]客户“张”名下土地发生流转变更，已推送至建行", time: "15:29:18" },
+	{ id: 3, type: "notice", message: "[通知]客户“张”名下土地发生流转变更，已推送至建行", time: "15:29:18" },
+	{ id: 4, type: "warning", message: "[预警]客户“张”名下土地发生流转变更，已推送至建行", time: "15:29:18" },
+	{ id: 5, type: "risk", message: "[风控]客户“张”名下土地发生流转变更，已推送至建行", time: "15:29:18" },
+	{ id: 6, type: "notice", message: "[通知]客户“张”名下土地发生流转变更，已推送至建行", time: "15:29:18" },
+];
+
+// 右侧第三模块：金融级安全防护体系
+const rightSecurityTitle = "金融级安全防护体系";
+const rightSecurityList = [
+	{ key: "sdk", title: "SDK集群鉴权", desc: "多因子认证动态令牌" },
+	{ key: "network", title: "政务专线隔离", desc: "物理隔离专网传输" },
+	{ key: "crypto", title: "国密算法传输", desc: "SM2/SM3/SM4" },
+	{ key: "privacy", title: "隐私计算脱敏", desc: "数据可用不可见" },
+];
+
+// 大屏缩放：保持 1920x1080 适配
 const { scale } = useScreenScale();
 
 useClock((value) => {
@@ -155,33 +180,13 @@ const screenTransform = computed(() => ({
 					<div class="screen-column screen-column--right">
 						<PublicBackground class="screen-panel" :panel-background="leftPanelBg" :title-background="titleBg" :title-icon="rightTitleIcon" :title="rightPanelTitle">
 							<!-- 右侧第一模块：土地抵押全生命周期管理 -->
-							<div class="right-lifecycle">
-								<div class="right-lifecycle__title">
-									<span class="right-lifecycle__triangle"></span>
-									<span class="right-lifecycle__title-text">{{ rightLifecycleTitle }}</span>
-								</div>
+							<RightModule_1 :title="rightLifecycleTitle" :list="rightLifecycleList" :total-label="rightLifecycleTotalLabel" :total-value="rightLifecycleTotal" :unit="rightLifecycleUnit" />
 
-								<div class="right-lifecycle__content" :style="{ backgroundImage: `url(${rightLifecycleBg})` }">
-									<div v-for="item in rightLifecycleList" :key="item.key" class="right-lifecycle__row">
-										<div class="right-lifecycle__label">{{ item.label }}</div>
+							<!-- 右侧第二模块：主动式风险预警推送 -->
+							<RightModule_2 :title="rightPushTitle" :more-text="rightPushMoreText" :list="rightPushList" />
 
-										<div class="right-lifecycle__stat">
-											<div class="right-lifecycle__value" :class="item.colorClass">
-												<span>{{ item.value }}</span>
-												<i>笔</i>
-											</div>
-											<div class="right-lifecycle__percent">({{ item.percent }})</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="right-lifecycle__total">
-									<span class="right-lifecycle__total-label">合计:</span>
-									<span class="right-lifecycle__total-value">{{ rightLifecycleTotal }}</span>
-									<span class="right-lifecycle__total-unit">笔</span>
-								</div>
-								<div class="left-panel__border-but"></div>
-							</div>
+							<!-- 右侧第三模块：金融级安全防护体系 -->
+							<RightModule_3 :title="rightSecurityTitle" :list="rightSecurityList" />
 						</PublicBackground>
 					</div>
 				</div>
@@ -296,152 +301,5 @@ const screenTransform = computed(() => ({
 	letter-spacing: 3px;
 	color: rgba(109, 206, 255, 0.82);
 	text-shadow: 0 0 10px rgba(43, 170, 255, 0.2);
-}
-
-/* 右侧第一模块：整体容器 */
-.right-lifecycle {
-	width: 474px;
-	margin: 4px auto 0;
-}
-
-/* 右侧第一模块：标题栏 */
-.right-lifecycle__title {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	height: 30px;
-	margin-left: 16px;
-}
-
-/* 右侧第一模块：蓝色三角装饰 */
-.right-lifecycle__triangle {
-	width: 0;
-	height: 0;
-	margin-top: 1px;
-	border-top: 8px solid transparent;
-	border-bottom: 8px solid transparent;
-	border-left: 15px solid #42b8ff;
-	filter: drop-shadow(0 0 8px rgba(66, 184, 255, 0.28));
-}
-
-/* 右侧第一模块：标题文字 */
-.right-lifecycle__title-text {
-	font-size: 17px;
-	font-weight: 700;
-	letter-spacing: 0.6px;
-	color: #68caff;
-	text-shadow: 0 0 8px rgba(46, 185, 255, 0.3);
-}
-
-/* 右侧第一模块：内容背景区 */
-.right-lifecycle__content {
-	display: flex;
-	flex-direction: column;
-	width: 474px;
-	height: 220px;
-	margin-top: 6px;
-	padding: 4px 0px 0 47px;
-	box-sizing: border-box;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 100% 100%;
-}
-
-/* 右侧第一模块：单行内容 */
-.right-lifecycle__row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	height: 53px;
-}
-
-/* 右侧第一模块：左侧标题 */
-.right-lifecycle__label {
-	font-size: 16px;
-	font-weight: 700;
-	letter-spacing: 0.2px;
-	color: #f4fbff;
-	text-shadow: 0 0 8px rgba(255, 255, 255, 0.12);
-}
-
-/* 右侧第一模块：右侧统计列 */
-.right-lifecycle__stat {
-	width: 126px;
-	text-align: left;
-}
-
-/* 右侧第一模块：数值与单位 */
-.right-lifecycle__value {
-	display: flex;
-	align-items: baseline;
-	gap: 8px;
-	font-weight: 700;
-	line-height: 1;
-
-	span {
-		font-size: 20px;
-		letter-spacing: 0.5px;
-	}
-
-	i {
-		font-style: normal;
-		font-size: 12px;
-	}
-}
-
-/* 右侧第一模块：四色数值 */
-.right-lifecycle__value--blue {
-	color: #47aaff;
-}
-
-.right-lifecycle__value--cyan {
-	color: #28f1ca;
-}
-
-.right-lifecycle__value--gold {
-	color: #ffc649;
-}
-
-.right-lifecycle__value--purple {
-	color: #a88cff;
-}
-
-/* 右侧第一模块：占比文本 */
-.right-lifecycle__percent {
-	margin-top: 7px;
-	padding-left: 2px;
-	font-size: 12px;
-	color: rgba(229, 241, 255, 0.78);
-}
-
-/* 右侧第一模块：合计区 */
-.right-lifecycle__total {
-	display: flex;
-	align-items: baseline;
-	justify-content: center;
-	gap: 8px;
-	margin-top: 6px;
-}
-
-/* 右侧第一模块：合计辅助文字 */
-.right-lifecycle__total-label,
-.right-lifecycle__total-unit {
-	font-size: 17px;
-	color: #eef8ff;
-}
-
-/* 右侧第一模块：合计数字 */
-.right-lifecycle__total-value {
-	font-size: 20px;
-	font-weight: 700;
-	line-height: 1;
-	color: #ffc74c;
-	letter-spacing: 0.6px;
-	text-shadow: 0 0 10px rgba(255, 199, 76, 0.24);
-}
-/* 底部分隔线：用于和后续模块做视觉分隔 */
-.left-panel__border-but {
-	margin-top: 9px;
-	border-bottom: 1px solid #002f5d;
 }
 </style>
