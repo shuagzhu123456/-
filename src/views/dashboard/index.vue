@@ -11,9 +11,19 @@ import titleIcon from "@/assets/top-c1.png";
 import topBg from "@/assets/top.png";
 import titleBg from "@/assets/xiaobut-1.png";
 import rightTitleIcon from "@/assets/y-top-icon.png";
+import centerBottomMapBg from "@/assets/z-dt-bj.png";
+import centerBottomTitleBg from "@/assets/z-top.png";
+import centerBankIcon1 from "@/assets/z-d-icon1.png";
+import centerBankIcon2 from "@/assets/z-d-icon2.png";
+import centerBankIcon3 from "@/assets/z-d-icon3.png";
+import centerBankIcon4 from "@/assets/z-d-icon4.png";
+import centerBankIcon5 from "@/assets/z-d-icon5.png";
+import centerBankIcon6 from "@/assets/z-d-icon6.png";
+import centerBankIcon7 from "@/assets/z-d-icon7.png";
 import Module_1 from "@/components/Module_1.vue";
 import Module_2 from "@/components/Module_2.vue";
 import Module_3 from "@/components/Module_3.vue";
+import MiddleZoneTop from "@/components/MiddleZone/MiddleZone_top.vue";
 import PublicBackground from "@/components/PublicBackground.vue";
 import RightModule_1 from "@/components/rightModule_1.vue";
 import RightModule_2 from "@/components/rightModule_2.vue";
@@ -85,6 +95,13 @@ const batchEndLabel = "完成时间:";
 const batchStartTime = "2026-05-31 20:15:02";
 const batchEndTime = "2026-05-31 20:15:02";
 
+// 中间区顶部：三张统计卡
+const middleTopList = [
+	{ key: "area", label: "累计确权土地面积", value: "12,856,34", unit: "万亩" },
+	{ key: "farmer", label: "覆盖涉农主体数", value: "10,245", unit: "户/家" },
+	{ key: "finance", label: "支撑信贷总金额", value: "15,678,44", unit: "万元" },
+];
+
 // 右侧第一模块：土地抵押全生命周期管理
 const rightLifecycleTitle = "土地抵押全生命周期管理";
 const rightLifecycleTotalLabel = "合计:";
@@ -119,6 +136,26 @@ const rightSecurityList = [
 ];
 
 // 大屏缩放：保持 1920x1080 适配
+// 中间区底部：全域耕地资产态势地图
+const centerBottomTitle = "全域耕地资产态势地图";
+const centerBottomLegendTitle = "确权面积(万亩)";
+const centerBottomLegendList = [
+	{ key: "lv1", label: ">500", color: "#45d8e9" },
+	{ key: "lv2", label: "300-500", color: "#2ab8d8" },
+	{ key: "lv3", label: "100-300", color: "#1e91bf" },
+	{ key: "lv4", label: "50-100", color: "#145d9e" },
+	{ key: "lv5", label: "<50", color: "#0a3978" },
+];
+const centerBottomBankList = [
+	{ key: "ccb", label: "建设银行", icon: centerBankIcon1 },
+	{ key: "abc", label: "农业银行", icon: centerBankIcon2 },
+	{ key: "boc", label: "中国银行", icon: centerBankIcon3 },
+	{ key: "psbc", label: "邮储银行", icon: centerBankIcon4 },
+	{ key: "hlj", label: "龙江银行", icon: centerBankIcon5 },
+	{ key: "rural", label: "农商银行", icon: centerBankIcon6 },
+	{ key: "other", label: "其他金融机构", icon: centerBankIcon7 },
+];
+
 const { scale } = useScreenScale();
 
 useClock((value) => {
@@ -169,10 +206,37 @@ const screenTransform = computed(() => ({
 						</PublicBackground>
 					</div>
 
-					<!-- 中间区：占 50%，先保留占位 -->
+					<!-- 中间区：占 50%，先布局顶部统计卡 -->
 					<div class="screen-column screen-column--center">
-						<div class="center-placeholder">
-							<div class="center-placeholder__label">中间区占位</div>
+						<div class="center-shell">
+							<!-- 中间区顶部 -->
+							<MiddleZoneTop :list="middleTopList" />
+
+							<!-- 中间区底部 -->
+							<div class="center-bottom">
+								<div class="center-bottom__title" :style="{ backgroundImage: `url(${centerBottomTitleBg})` }">
+									<span>{{ centerBottomTitle }}</span>
+								</div>
+
+								<div class="center-bottom__map-shell" :style="{ backgroundImage: `url(${centerBottomMapBg})` }">
+									<div class="center-bottom__legend">
+										<div class="center-bottom__legend-title">{{ centerBottomLegendTitle }}</div>
+										<div v-for="item in centerBottomLegendList" :key="item.key" class="center-bottom__legend-item">
+											<span class="center-bottom__legend-color" :style="{ background: item.color }"></span>
+											<span>{{ item.label }}</span>
+										</div>
+									</div>
+
+									<div class="center-bottom__map-placeholder">地图占位</div>
+								</div>
+
+								<div class="center-bottom__bank-row">
+									<div v-for="item in centerBottomBankList" :key="item.key" class="center-bottom__bank-item">
+										<img class="center-bottom__bank-icon" :src="item.icon" alt="" />
+										<div class="center-bottom__bank-label">{{ item.label }}</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 
@@ -246,15 +310,18 @@ const screenTransform = computed(() => ({
 	justify-content: flex-start;
 	padding-left: 10px;
 	box-sizing: border-box;
+	margin-left: 12px;
 }
 
-/* 中间区：先放占位盒 */
+/* 中间区：承载上下结构 */
 .screen-column--center {
 	display: flex;
 	align-items: flex-start;
 	justify-content: center;
-	padding: 15px;
+	padding: 16px;
 	box-sizing: border-box;
+	width: 1200px;
+	margin-left: 36px;
 }
 
 /* 右侧区：贴右对齐 */
@@ -262,7 +329,7 @@ const screenTransform = computed(() => ({
 	display: flex;
 	justify-content: flex-end;
 	box-sizing: border-box;
-	margin-left: 300px;
+	margin-left: 288px;
 }
 
 /* 面板容器：收回公共组件默认绝对定位 */
@@ -281,25 +348,121 @@ const screenTransform = computed(() => ({
 	margin-right: 0;
 }
 
-/* 中间区占位框：后续直接替换为真实模块 */
-.center-placeholder {
+/* 中间区外壳：后续继续承接顶部和底部模块 */
+.center-shell {
+	width: 100%;
+}
+
+/* 中间区底部：地图模块容器 */
+.center-bottom {
+	margin-top: 15px;
+	height: 900px;
+}
+
+/* 中间区底部：标题条 */
+.center-bottom__title {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: calc(100% - 48px);
-	min-height: 220px;
-	border: 1px dashed rgba(76, 174, 255, 0.45);
-	border-radius: 18px;
-	background: linear-gradient(180deg, rgba(8, 26, 53, 0.32), rgba(5, 17, 38, 0.18));
-	box-shadow: inset 0 0 20px rgba(17, 99, 196, 0.12);
+	width: 100%;
+	height: 48px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100% 100%;
+
+	span {
+		font-size: 24px;
+		font-weight: 700;
+		letter-spacing: 1px;
+		color: #eef8ff;
+		margin-bottom: 22px;
+		text-shadow: 0 0 10px rgba(61, 182, 255, 0.2);
+	}
 }
 
-/* 中间区占位文字 */
-.center-placeholder__label {
-	font-size: 24px;
-	font-weight: 600;
-	letter-spacing: 3px;
-	color: rgba(109, 206, 255, 0.82);
-	text-shadow: 0 0 10px rgba(43, 170, 255, 0.2);
+/* 中间区底部：地图背景区 */
+.center-bottom__map-shell {
+	position: relative;
+	height: 638px;
+	margin-top: 24px;
+	padding: 28px 28px 0;
+	box-sizing: border-box;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 98% 88%;
+}
+
+/* 中间区底部：左侧图例 */
+.center-bottom__legend {
+	position: absolute;
+	left: 10px;
+	bottom: 40px;
+	z-index: 2;
+}
+
+.center-bottom__legend-title {
+	margin-bottom: 12px;
+	font-size: 15px;
+	color: rgba(234, 244, 255, 0.9);
+}
+
+.center-bottom__legend-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 8px;
+	font-size: 14px;
+	color: rgba(225, 239, 255, 0.88);
+}
+
+.center-bottom__legend-color {
+	display: block;
+	width: 22px;
+	height: 14px;
+}
+
+/* 中间区底部：地图占位区 */
+.center-bottom__map-placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	border-radius: 18px;
+	color: rgba(111, 206, 255, 0.64);
+	font-size: 30px;
+	letter-spacing: 6px;
+	text-shadow: 0 0 12px rgba(43, 170, 255, 0.18);
+}
+
+/* 中间区底部：底部图标行 */
+.center-bottom__bank-row {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	align-items: end;
+	column-gap: 18px;
+	padding: 0 130px;
+}
+
+/* 中间区底部：单个图标项 */
+.center-bottom__bank-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.center-bottom__bank-icon {
+	display: block;
+	width: 82px;
+	height: 82px;
+	object-fit: contain;
+}
+
+.center-bottom__bank-label {
+	margin-top: 8px;
+	font-size: 14px;
+	color: rgba(231, 241, 255, 0.88);
+	text-align: center;
+	white-space: nowrap;
 }
 </style>
