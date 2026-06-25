@@ -4,7 +4,7 @@ import { GeoComponent, TooltipComponent, VisualMapComponent } from "echarts/comp
 import { init, registerMap, use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import heilongjiangGeoJsonUrl from "@/assets/map/230000.geojson?url";
+import heilongjiangGeoJsonUrl from "@/assets/map/230000-lite.geojson?url";
 
 defineOptions({
 	name: "HeilongjiangMap",

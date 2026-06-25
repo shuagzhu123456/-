@@ -1,8 +1,14 @@
 <script setup>
-import * as echarts from "echarts";
+import { GaugeChart } from "echarts/charts";
+import { TooltipComponent } from "echarts/components";
+import { init, use, graphic } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import chartBottomBg from "@/assets/echs-but.png";
 import chartStatusIcon from "@/assets/dpa.png";
+
+// 只注册当前仪表盘用到的 ECharts 能力，避免整包引入。
+use([GaugeChart, TooltipComponent, CanvasRenderer]);
 
 defineOptions({
 	name: "Module_2",
@@ -75,7 +81,7 @@ const initChart = () => {
 	}
 
 	if (!ruleMonitorChart) {
-		ruleMonitorChart = echarts.init(chartRef.value);
+		ruleMonitorChart = init(chartRef.value);
 		emit("chart-ready", ruleMonitorChart);
 	}
 
@@ -108,7 +114,7 @@ const initChart = () => {
 					width: 22,
 					roundCap: false,
 					itemStyle: {
-						color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+						color: new graphic.LinearGradient(0, 0, 1, 0, [
 							{ offset: 0, color: "#1a7fff" },
 							{ offset: 0.52, color: "#1fd5ff" },
 							{ offset: 1, color: "#10dd6d" },

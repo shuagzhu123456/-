@@ -1,59 +1,73 @@
 <script setup>
+import { computed } from "vue";
 import stepActiveCardBg from "@/assets/d3-2.png";
 import stepCardBg from "@/assets/d3-1.png";
 import stepConfirmIcon from "@/assets/d3-queren.png";
+import stepDesensitizeIcon from "@/assets/d3-tuomi.png";
+import stepDownloadIcon from "@/assets/d3-xiaza.png";
+import stepInflateIcon from "@/assets/d3-jieya.png";
+import stepStorageIcon from "@/assets/de-xixinz.png";
+import stepValidateIcon from "@/assets/d3-jiaoyan.png";
 
 defineOptions({
 	name: "Module_3",
 });
 
+const STEP_ICON_MAP = {
+	receive: stepDownloadIcon,
+	inflate: stepInflateIcon,
+	validate: stepValidateIcon,
+	desensitize: stepDesensitizeIcon,
+	storage: stepStorageIcon,
+};
+
 const props = defineProps({
-	// 模块标题：支持外部按业务场景传入
+	// 模块标题：页面只传业务标题文本。
 	title: {
 		type: String,
 		default: "",
 	},
-	// 当前批次文案：用于展示本次处理任务
+	// 当前批次文案：用于显示当前正在处理的数据批次。
 	currentBatchLabel: {
 		type: String,
 		default: "",
 	},
-	// 步骤列表：后续可直接替换为接口返回
+	// 步骤列表：只保留业务字段，图标由组件内部按 key 匹配。
 	steps: {
 		type: Array,
 		default: () => [],
 	},
-	// 进度标签：避免组件内部写死业务文案
+	// 进度标题：例如“处理进度”。
 	progressLabel: {
 		type: String,
 		default: "",
 	},
-	// 进度值：支持页面传入真实百分比
+	// 进度值：支持接口返回 number 或 string。
 	progressValue: {
 		type: [Number, String],
 		default: 0,
 	},
-	// 开始时间标签：用于左侧时间说明
+	// 开始时间标题。
 	startLabel: {
 		type: String,
 		default: "",
 	},
-	// 开始时间：后续可接接口返回
+	// 开始时间值。
 	startTime: {
 		type: String,
 		default: "",
 	},
-	// 完成时间标签：用于右侧时间说明
+	// 结束时间标题。
 	endLabel: {
 		type: String,
 		default: "",
 	},
-	// 完成时间：后续可接接口返回
+	// 结束时间值。
 	endTime: {
 		type: String,
 		default: "",
 	},
-	// 底部分隔线：允许按场景控制显示
+	// 是否显示进度条和时间区域上方分隔线。
 	showDivider: {
 		type: Boolean,
 		default: true,
@@ -62,22 +76,30 @@ const props = defineProps({
 
 defineEmits(["step-click"]);
 
-// 统一清洗进度值，保证展示层只处理合法百分比
-const normalizeProgressValue = (value) => {
-	const numericValue = Number(value);
+// 统一清洗进度值，避免接口数据异常时影响展示。
+const normalizedProgressValue = computed(() => {
+	const numericValue = Number(props.progressValue);
 	if (!Number.isFinite(numericValue)) {
 		return 0;
 	}
 
 	return Math.min(Math.max(numericValue, 0), 100);
-};
+});
 
-// 统一组装步骤展示数据，组件内部负责视觉资源映射
+// 组件内部补齐图标等视觉字段，页面只关心业务状态。
+const displaySteps = computed(() =>
+	props.steps.map((step) => ({
+		...step,
+		icon: STEP_ICON_MAP[step.key] ?? "",
+	})),
+);
+
+// 步骤卡片默认尺寸在这里控制；后续若想调大/调小，可先改 width、height。
 const getStepCardStyle = (step) => ({
 	backgroundImage: `url(${step.active ? stepActiveCardBg : stepCardBg})`,
 });
 
-const getProgressWidth = () => `${normalizeProgressValue(props.progressValue)}%`;
+const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 </script>
 
 <template>
@@ -89,16 +111,16 @@ const getProgressWidth = () => `${normalizeProgressValue(props.progressValue)}%`
 		</div>
 
 		<div class="batch-progress__steps">
-			<template v-for="(step, index) in steps" :key="step.key ?? index">
+			<template v-for="(step, index) in displaySteps" :key="step.key ?? index">
 				<div class="batch-progress__step" @click="$emit('step-click', step)">
 					<div class="batch-progress__step-card" :class="{ 'batch-progress__step-card--active': step.active }" :style="getStepCardStyle(step)">
-						<img class="batch-progress__step-icon" :src="step.icon" alt="" />
+						<img v-if="step.icon" class="batch-progress__step-icon" :src="step.icon" alt="" />
 						<img v-if="step.completed" class="batch-progress__step-check" :src="stepConfirmIcon" alt="" />
 					</div>
 					<div class="batch-progress__step-label">{{ step.label }}</div>
 				</div>
 
-				<div v-if="index < steps.length - 1" class="batch-progress__step-arrow">&gt;</div>
+				<div v-if="index < displaySteps.length - 1" class="batch-progress__step-arrow">&gt;</div>
 			</template>
 		</div>
 
@@ -109,7 +131,7 @@ const getProgressWidth = () => `${normalizeProgressValue(props.progressValue)}%`
 			<div class="batch-progress__bar-track">
 				<div class="batch-progress__bar-fill" :style="{ width: getProgressWidth() }"></div>
 			</div>
-			<div class="batch-progress__bar-value">{{ normalizeProgressValue(progressValue) }}%</div>
+			<div class="batch-progress__bar-value">{{ normalizedProgressValue }}%</div>
 		</div>
 
 		<div class="batch-progress__time-row">
@@ -129,13 +151,12 @@ const getProgressWidth = () => `${normalizeProgressValue(props.progressValue)}%`
 </template>
 
 <style scoped lang="scss">
-/* 第三模块容器：承载批次处理进度看板 */
+/* 组件整体宽度在这里控制；如需放大模块，可先改 width。 */
 .batch-progress {
 	width: 460px;
 	margin: 10px auto 0;
 }
 
-/* 第三模块标题行 */
 .batch-progress__title {
 	display: flex;
 	align-items: center;
@@ -167,7 +188,6 @@ const getProgressWidth = () => `${normalizeProgressValue(props.progressValue)}%`
 	color: rgba(239, 247, 255, 0.72);
 }
 
-/* 第三模块步骤流 */
 .batch-progress__steps {
 	display: flex;
 	align-items: flex-start;
@@ -179,17 +199,18 @@ const getProgressWidth = () => `${normalizeProgressValue(props.progressValue)}%`
 	cursor: pointer;
 }
 
+/* 单个步骤卡片大小在这里控制；默认是 79 x 85。 */
 .batch-progress__step-card {
 	position: relative;
 	width: 79px;
 	height: 85px;
 	margin: 0 auto;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 100% 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100% 100%;
 }
 
 .batch-progress__step-card--active {
@@ -228,13 +249,12 @@ const getProgressWidth = () => `${normalizeProgressValue(props.progressValue)}%`
 	color: rgba(239, 247, 255, 0.7);
 }
 
-/* 第三模块分隔线 */
 .batch-progress__divider {
 	margin-top: 14px;
 	border-bottom: 1px solid #002f5d;
 }
 
-/* 第三模块进度条 */
+/* 进度条高度、圆角、颜色可在这一组样式里调整。 */
 .batch-progress__bar-row {
 	display: grid;
 	grid-template-columns: auto 1fr auto;
@@ -270,7 +290,7 @@ const getProgressWidth = () => `${normalizeProgressValue(props.progressValue)}%`
 	color: #5eb7ff;
 }
 
-/* 第三模块时间区域 */
+/* 时间区域的高度、边框、左右留白可在这里调整。 */
 .batch-progress__time-row {
 	display: grid;
 	grid-template-columns: 1fr auto 1fr;

@@ -1,53 +1,43 @@
 <script setup>
+import { computed } from "vue";
+import panelBackgroundImage from "@/assets/lift-bj2x.png";
+import leftTitleIcon from "@/assets/top-c1.png";
+import rightTitleIcon from "@/assets/y-top-icon.png";
+import titleBackgroundImage from "@/assets/xiaobut-1.png";
+
 defineOptions({
 	name: "PublicBackground",
 });
 
 const props = defineProps({
-	// 面板背景图：由外部传入，兼容左右区域复用
-	panelBackground: {
-		type: String,
-		default: "",
-	},
-	// 标题背景图：用于承载统一标题装饰
-	titleBackground: {
-		type: String,
-		default: "",
-	},
-	// 标题图标：支持不同区域传入不同图标
-	titleIcon: {
-		type: String,
-		default: "",
-	},
-	// 标题文本：保持标题内容可配置
+	// 面板标题：页面只需要传真实业务标题文本。
 	title: {
 		type: String,
 		default: "",
 	},
-	// 背景替代文本：兼顾通用性与可访问性
-	panelAlt: {
+	// 面板类型：用于区分左侧和右侧的固定视觉资源。
+	side: {
 		type: String,
-		default: "",
-	},
-	// 图标替代文本：兼顾通用性与可访问性
-	iconAlt: {
-		type: String,
-		default: "",
+		default: "left",
+		validator: (value) => ["left", "right"].includes(value),
 	},
 });
 
 defineEmits(["title-click"]);
+
+// 图标由组件内部决定，页面不再关心静态资源路径。
+const titleIcon = computed(() => (props.side === "right" ? rightTitleIcon : leftTitleIcon));
 </script>
 
 <template>
-	<aside class="public-panel" :style="{ backgroundImage: panelBackground ? `url(${panelBackground})` : 'none' }" :aria-label="panelAlt">
-		<!-- 标题外壳：统一承载背景、图标和标题文字 -->
-		<div class="public-panel__header" :style="{ backgroundImage: titleBackground ? `url(${titleBackground})` : 'none' }" @click="$emit('title-click')">
-			<img v-if="titleIcon" class="public-panel__header-icon" :src="titleIcon" :alt="iconAlt" />
+	<aside class="public-panel" :style="{ backgroundImage: `url(${panelBackgroundImage})` }">
+		<!-- 标题区域：固定承载标题背景和左右图标。 -->
+		<div class="public-panel__header" :style="{ backgroundImage: `url(${titleBackgroundImage})` }" @click="$emit('title-click')">
+			<img class="public-panel__header-icon" :src="titleIcon" alt="" />
 			<span class="public-panel__header-text">{{ title }}</span>
 		</div>
 
-		<!-- 内容插槽：业务模块由页面自行组合 -->
+		<!-- 业务内容由插槽承接，组件只负责统一视觉层。 -->
 		<div class="public-panel__content">
 			<slot />
 		</div>
@@ -55,7 +45,6 @@ defineEmits(["title-click"]);
 </template>
 
 <style scoped lang="scss">
-/* 公共面板外壳：负责统一背景与基础内边距 */
 .public-panel {
 	position: absolute;
 	width: 508px;
@@ -67,7 +56,6 @@ defineEmits(["title-click"]);
 	background-size: 100% 100%;
 }
 
-/* 公共标题区：统一承载标题装饰与布局 */
 .public-panel__header {
 	display: flex;
 	align-items: center;
@@ -79,14 +67,12 @@ defineEmits(["title-click"]);
 	background-size: 100% 100%;
 }
 
-/* 公共标题图标：保持统一尺寸与对齐 */
 .public-panel__header-icon {
 	width: 28px;
 	height: 28px;
 	flex-shrink: 0;
 }
 
-/* 公共标题文字：复用大屏高亮风格 */
 .public-panel__header-text {
 	font-size: 20px;
 	font-weight: 700;
@@ -95,7 +81,6 @@ defineEmits(["title-click"]);
 	text-shadow: 0 0 10px rgba(47, 180, 255, 0.22);
 }
 
-/* 公共内容区：承接具体业务模块 */
 .public-panel__content {
 	width: 100%;
 }
