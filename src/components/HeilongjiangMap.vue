@@ -197,7 +197,7 @@ const buildOption = () => ({
 		// 地图默认位置：想上下左右挪地图，改这里。
 		layoutCenter: ["52%", "50%"],
 		// 地图默认大小：后续想整体放大/缩小地图，优先改这里。
-		layoutSize: "99%",
+		layoutSize: "97%",
 		selectedMode: "single",
 		// 地图默认样式：块面颜色、边框颜色、边框粗细、发光强度都在这里。
 		itemStyle: {
@@ -457,9 +457,9 @@ onBeforeUnmount(() => {
 .heilongjiang-map__grid {
 	position: absolute;
 	inset: 0;
-	background-image: linear-gradient(rgba(31, 120, 194, 0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(31, 120, 194, 0.12) 1px, transparent 1px);
+	background-image: linear-gradient(rgba(43, 135, 211, 0.288) 1px, transparent 1px), linear-gradient(90deg, rgba(26, 106, 172, 0.288) 1px, transparent 1px);
 	background-size: 34px 30px;
-	mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 1) 52%, transparent 88%);
+	mask-image: radial-gradient(circle at center, rgb(0, 0, 0) 52%, transparent 88%);
 	opacity: 0.32;
 	pointer-events: none;
 }

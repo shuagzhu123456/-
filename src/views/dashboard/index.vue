@@ -351,7 +351,7 @@ const screenTransform = computed(() => ({
 	display: flex;
 	justify-content: flex-end;
 	box-sizing: border-box;
-	margin-left: 288px;
+	margin-left: 62%;
 }
 
 /* 面板容器：收回公共组件默认绝对定位 */
@@ -405,7 +405,7 @@ const screenTransform = computed(() => ({
 /* 中间区底部：地图背景区 */
 .center-bottom__map-shell {
 	position: relative;
-	height: 663px;
+	height: 678px;
 	padding: 10px 28px 0;
 	box-sizing: border-box;
 	background-repeat: no-repeat;

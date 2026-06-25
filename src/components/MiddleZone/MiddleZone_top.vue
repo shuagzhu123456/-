@@ -77,7 +77,7 @@ const cardConfigMap = {
 .middle-top__card {
 	display: flex;
 	align-items: center;
-	height: 135px;
+	height: 114px;
 	padding: 0 30px 0 30px;
 	box-sizing: border-box;
 	background-repeat: no-repeat;
