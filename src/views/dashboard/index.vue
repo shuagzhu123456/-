@@ -28,6 +28,7 @@ import PublicBackground from "@/components/PublicBackground.vue";
 import RightModule_1 from "@/components/rightModule_1.vue";
 import RightModule_2 from "@/components/rightModule_2.vue";
 import RightModule_3 from "@/components/rightModule_3.vue";
+import HeilongjiangMap from "@/components/HeilongjiangMap.vue";
 import ScreenHeader from "@/components/screen/ScreenHeader.vue";
 import { useClock } from "@/composables/useClock";
 import { useScreenScale } from "@/composables/useScreenScale";
@@ -155,6 +156,25 @@ const centerBottomBankList = [
 	{ key: "rural", label: "农商银行", icon: centerBankIcon6 },
 	{ key: "other", label: "其他金融机构", icon: centerBankIcon7 },
 ];
+const centerBottomHeatData = ref([
+	{ name: "哈尔滨市", value: 620, lineColor: "#74fdff" },
+	{ name: "齐齐哈尔市", value: 358, lineColor: "#6af9ff" },
+	{ name: "大庆市", value: 210, lineColor: "#61f7ff" },
+	{ name: "绥化市", value: 186, lineColor: "#5eedff" },
+	{ name: "黑河市", value: 88, lineColor: "#69f0ff" },
+	{ name: "伊春市", value: 132, lineColor: "#6afcff" },
+	{ name: "鹤岗市", value: 115, lineColor: "#73f8ff" },
+	{ name: "佳木斯市", value: 301, lineColor: "#7af8ff" },
+	{ name: "双鸭山市", value: 145, lineColor: "#72ffff" },
+	{ name: "七台河市", value: 93, lineColor: "#6cefff" },
+	{ name: "鸡西市", value: 162, lineColor: "#ffc64f" },
+	{ name: "牡丹江市", value: 274, lineColor: "#ffd35a" },
+	{ name: "大兴安岭地区", value: 76, lineColor: "#75fbff" },
+]);
+
+const handleMapRegionClick = (payload) => {
+	console.log("map region click:", payload);
+};
 
 const { scale } = useScreenScale();
 
@@ -227,7 +247,9 @@ const screenTransform = computed(() => ({
 										</div>
 									</div>
 
-									<div class="center-bottom__map-placeholder">地图占位</div>
+									<div class="center-bottom__map-panel">
+										<HeilongjiangMap :heat-data="centerBottomHeatData" @region-click="handleMapRegionClick" />
+									</div>
 								</div>
 
 								<div class="center-bottom__bank-row">
@@ -383,9 +405,8 @@ const screenTransform = computed(() => ({
 /* 中间区底部：地图背景区 */
 .center-bottom__map-shell {
 	position: relative;
-	height: 638px;
-	margin-top: 24px;
-	padding: 28px 28px 0;
+	height: 663px;
+	padding: 10px 28px 0;
 	box-sizing: border-box;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -421,18 +442,12 @@ const screenTransform = computed(() => ({
 	height: 14px;
 }
 
-/* 中间区底部：地图占位区 */
-.center-bottom__map-placeholder {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+/* 中间区底部：地图实例区 */
+.center-bottom__map-panel {
+	position: relative;
 	width: 100%;
 	height: 100%;
 	border-radius: 18px;
-	color: rgba(111, 206, 255, 0.64);
-	font-size: 30px;
-	letter-spacing: 6px;
-	text-shadow: 0 0 12px rgba(43, 170, 255, 0.18);
 }
 
 /* 中间区底部：底部图标行 */
