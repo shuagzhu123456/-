@@ -153,7 +153,8 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 <style scoped lang="scss">
 /* 组件整体宽度在这里控制；如需放大模块，可先改 width。 */
 .batch-progress {
-	width: 460px;
+	width: 100%;
+	max-width: 28.75rem;
 	margin: 10px auto 0;
 }
 
@@ -175,7 +176,7 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 }
 
 .batch-progress__title-text {
-	font-size: 17px;
+	font-size: clamp(15px, 0.9vw, 17px);
 	font-weight: 700;
 	letter-spacing: 0.5px;
 	color: #68caff;
@@ -184,26 +185,27 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 
 .batch-progress__current {
 	margin-left: 12px;
-	font-size: 13px;
+	font-size: clamp(11px, 0.72vw, 13px);
 	color: rgba(239, 247, 255, 0.72);
 }
 
 .batch-progress__steps {
 	display: flex;
 	align-items: flex-start;
+	justify-content: space-between;
 	margin-top: 16px;
 }
 
 .batch-progress__step {
-	width: 87px;
+	width: clamp(60px, 4.6vw, 87px);
 	cursor: pointer;
 }
 
 /* 单个步骤卡片大小在这里控制；默认是 79 x 85。 */
 .batch-progress__step-card {
 	position: relative;
-	width: 79px;
-	height: 85px;
+	width: clamp(56px, 4.15vw, 79px);
+	height: clamp(60px, 4.5vw, 85px);
 	margin: 0 auto;
 	display: flex;
 	align-items: center;
@@ -219,8 +221,8 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 
 .batch-progress__step-icon {
 	display: block;
-	max-width: 43px;
-	max-height: 46px;
+	max-width: clamp(30px, 2.25vw, 43px);
+	max-height: clamp(32px, 2.4vw, 46px);
 }
 
 .batch-progress__step-check {
@@ -233,7 +235,7 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 
 .batch-progress__step-label {
 	margin-top: 10px;
-	font-size: 12px;
+	font-size: clamp(10px, 0.68vw, 12px);
 	line-height: 1.1;
 	text-align: center;
 	color: rgba(239, 247, 255, 0.9);
@@ -241,9 +243,9 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 }
 
 .batch-progress__step-arrow {
-	width: 22px;
-	padding-top: 30px;
-	font-size: 24px;
+	width: clamp(12px, 1vw, 22px);
+	padding-top: clamp(16px, 1.8vw, 30px);
+	font-size: clamp(16px, 1.25vw, 24px);
 	line-height: 1;
 	text-align: center;
 	color: rgba(239, 247, 255, 0.7);
@@ -264,14 +266,14 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 }
 
 .batch-progress__bar-label {
-	font-size: 13px;
+	font-size: clamp(11px, 0.72vw, 13px);
 	font-weight: 600;
 	color: rgba(239, 247, 255, 0.86);
 }
 
 .batch-progress__bar-track {
 	position: relative;
-	height: 22px;
+	height: clamp(16px, 1.2vw, 22px);
 	border-radius: 14px;
 	background: rgba(30, 70, 130, 0.46);
 	overflow: hidden;
@@ -285,7 +287,7 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 }
 
 .batch-progress__bar-value {
-	font-size: 16px;
+	font-size: clamp(14px, 0.95vw, 16px);
 	font-weight: 700;
 	color: #5eb7ff;
 }
@@ -295,7 +297,7 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 	display: grid;
 	grid-template-columns: 1fr auto 1fr;
 	align-items: center;
-	height: 46px;
+	height: clamp(36px, 2.8vw, 46px);
 	margin-top: 18px;
 	padding: 0 16px;
 	border: 1px solid rgba(29, 125, 255, 0.22);
@@ -307,7 +309,7 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	font-size: 11px;
+	font-size: clamp(10px, 0.62vw, 11px);
 	color: rgba(239, 247, 255, 0.78);
 }
 
@@ -320,5 +322,34 @@ const getProgressWidth = () => `${normalizedProgressValue.value}%`;
 	width: 1px;
 	height: 16px;
 	background: rgba(29, 125, 255, 0.22);
+}
+
+@media (max-height: 980px) {
+	.batch-progress {
+		margin-top: 8px;
+	}
+
+	.batch-progress__steps {
+		margin-top: 12px;
+	}
+
+	.batch-progress__step-label {
+		margin-top: 8px;
+	}
+
+	.batch-progress__divider {
+		margin-top: 12px;
+	}
+
+	.batch-progress__bar-row {
+		margin-top: 14px;
+		gap: 10px;
+	}
+
+	.batch-progress__time-row {
+		height: 34px;
+		margin-top: 12px;
+		padding: 0 12px;
+	}
 }
 </style>

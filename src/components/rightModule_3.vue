@@ -56,7 +56,8 @@ const props = defineProps({
 <style scoped lang="scss">
 /* 右侧第三模块：整体容器 */
 .security-system {
-	width: 478px;
+	width: 100%;
+	max-width: 29.875rem;
 	margin: 18px auto 0;
 }
 
@@ -81,7 +82,7 @@ const props = defineProps({
 
 /* 右侧第三模块：标题文字 */
 .security-system__title-text {
-	font-size: 17px;
+	font-size: clamp(15px, 0.9vw, 17px);
 	font-weight: 700;
 	letter-spacing: 0.6px;
 	color: #68caff;
@@ -91,7 +92,7 @@ const props = defineProps({
 /* 右侧第三模块：主体布局容器 */
 .security-system__content {
 	position: relative;
-	height: 250px;
+	height: clamp(193px, 23vh, 250px);
 	margin-top: 10px;
 }
 
@@ -100,8 +101,8 @@ const props = defineProps({
 	position: absolute;
 	top: 50%;
 	left: 52%;
-	width: 268px;
-	height: 268px;
+	width: clamp(192px, 14vw, 268px);
+	height: clamp(192px, 14vw, 268px);
 	transform: translate(-50%, -50%);
 }
 
@@ -109,8 +110,8 @@ const props = defineProps({
 .security-system__visual-rotating {
 	position: absolute;
 	inset: 0;
-	width: 250px;
-	height: 250px;
+	width: clamp(176px, 13vw, 250px);
+	height: clamp(176px, 13vw, 250px);
 	animation: security-rotate 12s linear infinite;
 }
 
@@ -119,8 +120,8 @@ const props = defineProps({
 	position: absolute;
 	top: 48%;
 	left: 47%;
-	width: 170px;
-	height: 170px;
+	width: clamp(112px, 9vw, 170px);
+	height: clamp(112px, 9vw, 170px);
 	transform: translate(-50%, -50%);
 }
 
@@ -133,9 +134,9 @@ const props = defineProps({
 /* 右侧第三模块：能力卡片 */
 .security-system__card {
 	position: absolute;
-	width: 154px;
-	height: 85px;
-	padding: 20px 10px 0;
+	width: clamp(112px, 8vw, 154px);
+	height: clamp(64px, 5.5vw, 85px);
+	padding: 1rem 0.625rem 0;
 	box-sizing: border-box;
 	text-align: center;
 	background-image: url("@/assets/r-bj-conm.png");
@@ -166,7 +167,7 @@ const props = defineProps({
 
 /* 右侧第三模块：卡片主标题 */
 .security-system__card-title {
-	font-size: 14px;
+	font-size: clamp(12px, 0.82vw, 14px);
 	font-weight: 700;
 	line-height: 1.2;
 	color: #7bc0ff;
@@ -176,7 +177,7 @@ const props = defineProps({
 /* 右侧第三模块：卡片说明 */
 .security-system__card-desc {
 	margin-top: 12px;
-	font-size: 12px;
+	font-size: clamp(10px, 0.7vw, 12px);
 	line-height: 1.3;
 	color: rgba(231, 241, 255, 0.86);
 }
@@ -194,6 +195,47 @@ const props = defineProps({
 
 	to {
 		transform: rotate(360deg);
+	}
+}
+
+@media (max-height: 980px) {
+	.security-system {
+		margin-top: 8px;
+	}
+
+	.security-system__content {
+		height: clamp(184px, 18vh, 208px);
+		margin-top: 26px;
+	}
+
+	.security-system__visual {
+		width: clamp(156px, 11vw, 216px);
+		height: clamp(156px, 11vw, 216px);
+	}
+
+	.security-system__visual-rotating {
+		width: clamp(144px, 10vw, 200px);
+		height: clamp(144px, 10vw, 200px);
+	}
+
+	.security-system__visual-core {
+		width: clamp(88px, 6.8vw, 126px);
+		height: clamp(88px, 6.8vw, 126px);
+	}
+
+	.security-system__card {
+		width: clamp(98px, 6.8vw, 132px);
+		height: clamp(52px, 4.2vw, 68px);
+		padding-top: 10px;
+	}
+
+	.security-system__card-desc {
+		margin-top: 6px;
+	}
+
+	.security-system__card--2,
+	.security-system__card--4 {
+		bottom: 10px;
 	}
 }
 </style>

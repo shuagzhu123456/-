@@ -13,7 +13,6 @@ import RightModule_2 from "@/components/rightModule_2.vue";
 import RightModule_3 from "@/components/rightModule_3.vue";
 import ScreenHeader from "@/components/screen/ScreenHeader.vue";
 import { useClock } from "@/composables/useClock";
-import { useScreenScale } from "@/composables/useScreenScale";
 
 defineOptions({
 	name: "DashboardView",
@@ -150,24 +149,19 @@ const handleMapRegionClick = (payload) => {
 	console.log("map region click:", payload);
 };
 
-const { scale } = useScreenScale();
-
 useClock((value) => {
 	currentTime.value = value;
 });
 
 // 统一缩放样式：头部和内容区共用
-const screenTransform = computed(() => ({
-	transform: `scale(${scale.value})`,
-}));
 </script>
 
 <template>
 	<div class="screen-page">
 		<div class="screen-stage">
-			<ScreenHeader v-model:title="pageTitle" v-model:time-value="currentTime" :time-label="updateLabel" :background-src="topBg" :canvas-style="screenTransform" />
+			<ScreenHeader v-model:title="pageTitle" v-model:time-value="currentTime" :time-label="updateLabel" :background-src="topBg" />
 
-			<div class="screen-content-layer" :style="screenTransform">
+			<div class="screen-content-layer">
 				<div class="screen-body">
 					<div class="screen-column screen-column--left">
 						<PublicBackground class="screen-panel" side="left" :title="leftPanelTitle">
@@ -222,15 +216,18 @@ const screenTransform = computed(() => ({
 <style scoped lang="scss">
 .screen-page {
 	min-height: 100vh;
-	overflow: hidden;
+	min-height: 100dvh;
+	overflow-x: hidden;
+	overflow-y: auto;
 	background: radial-gradient(circle at top, rgba(17, 84, 159, 0.28), transparent 38%), linear-gradient(180deg, #031325 0%, #020b18 100%);
 }
 
 .screen-stage {
 	position: relative;
 	width: 100vw;
-	height: 100vh;
-	overflow: hidden;
+	min-height: 100vh;
+	min-height: 100dvh;
+	overflow: visible;
 }
 
 .screen-content-layer {
@@ -238,50 +235,48 @@ const screenTransform = computed(() => ({
 	top: 0;
 	left: 0;
 	z-index: 2;
-	width: 1920px;
-	height: 1080px;
-	transform-origin: top left;
+	width: 100%;
+	height: 100%;
 	pointer-events: none;
 }
 
 .screen-body {
 	display: grid;
-	grid-template-columns: 25% 50% 25%;
+	grid-template-columns: clamp(28rem, 25vw, 31.75rem) minmax(0, 1fr) clamp(28rem, 25vw, 31.75rem);
+	column-gap: clamp(0.75rem, 1vw, 1rem);
 	width: 100%;
-	padding-top: 90px;
+	height: 100%;
+	padding: clamp(5.25rem, 8vh, 5.75rem) clamp(0.75rem, 1vw, 1rem) clamp(1rem, 1.8vh, 1.5rem);
 	box-sizing: border-box;
 	pointer-events: auto;
+	overflow: hidden;
 }
 
 .screen-column {
 	position: relative;
 	width: 100%;
-	height: 100%;
+	min-width: 0;
 }
 
 .screen-column--left {
 	display: flex;
 	justify-content: flex-start;
-	padding-left: 10px;
 	box-sizing: border-box;
-	margin-left: 12px;
 }
 
 .screen-column--center {
 	display: flex;
 	align-items: flex-start;
 	justify-content: center;
-	padding: 16px;
+	min-width: 0;
+	padding-top: clamp(0.75rem, 1vh, 1rem);
 	box-sizing: border-box;
-	width: 1200px;
-	margin-left: 36px;
 }
 
 .screen-column--right {
 	display: flex;
 	justify-content: flex-end;
 	box-sizing: border-box;
-	margin-left: 62%;
 }
 
 .screen-panel {
@@ -300,5 +295,23 @@ const screenTransform = computed(() => ({
 
 .center-shell {
 	width: 100%;
+	min-width: 0;
+}
+
+@media (max-width: 1600px) {
+	.screen-body {
+		grid-template-columns: clamp(23rem, 26vw, 27rem) minmax(0, 1fr) clamp(23rem, 26vw, 27rem);
+		padding-top: clamp(4.9rem, 7vh, 5.35rem);
+		padding-bottom: clamp(0.75rem, 1.4vh, 1.25rem);
+	}
+}
+
+@media (max-width: 1366px) {
+	.screen-body {
+		grid-template-columns: clamp(20.5rem, 27vw, 23.5rem) minmax(0, 1fr) clamp(20.5rem, 27vw, 23.5rem);
+		column-gap: 0.75rem;
+		padding-top: clamp(4.35rem, 6vh, 4.9rem);
+		padding-bottom: 0.75rem;
+	}
 }
 </style>

@@ -78,7 +78,7 @@ const cardConfigMap = {
 	display: flex;
 	align-items: center;
 	height: 114px;
-	padding: 0 30px 0 30px;
+	padding: 0 16px 0 16px;
 	box-sizing: border-box;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -90,16 +90,16 @@ const cardConfigMap = {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 67px;
-	height: 67px;
+	width: 56px;
+	height: 56px;
 	flex-shrink: 0;
 }
 
 /* 中间区顶部：图标 */
 .middle-top__icon {
 	display: block;
-	width: 67px;
-	height: 67px;
+	width: 55px;
+	height: 55px;
 	object-fit: contain;
 }
 
@@ -129,7 +129,7 @@ const cardConfigMap = {
 
 /* 中间区顶部：主数值 */
 .middle-top__value {
-	font-size: 30px;
+	font-size: 26px;
 	font-weight: 700;
 	line-height: 1;
 	letter-spacing: 0.5px;

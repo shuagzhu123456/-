@@ -47,8 +47,8 @@ const titleIcon = computed(() => (props.side === "right" ? rightTitleIcon : left
 <style scoped lang="scss">
 .public-panel {
 	position: absolute;
-	width: 508px;
-	height: 101%;
+	width: clamp(28rem, 25vw, 31.75rem);
+	height: 100%;
 	padding: 8px;
 	box-sizing: border-box;
 	background-repeat: no-repeat;
@@ -83,5 +83,25 @@ const titleIcon = computed(() => (props.side === "right" ? rightTitleIcon : left
 
 .public-panel__content {
 	width: 100%;
+}
+
+@media (max-height: 980px) {
+	.public-panel {
+		padding: 6px;
+	}
+
+	.public-panel__header {
+		height: 38px;
+		padding: 0 14px 0 12px;
+	}
+
+	.public-panel__header-icon {
+		width: 24px;
+		height: 24px;
+	}
+
+	.public-panel__header-text {
+		font-size: 18px;
+	}
 }
 </style>

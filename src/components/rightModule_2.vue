@@ -161,8 +161,9 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 /* 右侧第二模块：整体容器 */
 .right-push {
-	width: 478px;
-	margin: 8px auto 0;
+	width: 100%;
+	max-width: 29.875rem;
+	margin: 0.5rem auto 0;
 }
 
 /* 右侧第二模块：标题栏 */
@@ -193,7 +194,7 @@ onBeforeUnmount(() => {
 
 /* 右侧第二模块：标题文字 */
 .right-push__title-text {
-	font-size: 17px;
+	font-size: clamp(0.95rem, 0.9vw, 1.0625rem);
 	font-weight: 700;
 	letter-spacing: 0.6px;
 	color: #68caff;
@@ -208,7 +209,7 @@ onBeforeUnmount(() => {
 	padding: 0;
 	border: 0;
 	background: transparent;
-	font-size: 14px;
+	font-size: clamp(0.75rem, 0.82vw, 0.875rem);
 	color: rgba(236, 245, 255, 0.92);
 	cursor: pointer;
 
@@ -230,7 +231,7 @@ onBeforeUnmount(() => {
 
 /* 右侧第二模块：可视区域 */
 .right-push__list-mask {
-	height: 270px;
+	height: clamp(15rem, 24vh, 16.875rem);
 	overflow: hidden;
 }
 
@@ -242,10 +243,10 @@ onBeforeUnmount(() => {
 /* 右侧第二模块：单行消息 */
 .right-push__item {
 	display: grid;
-	grid-template-columns: 26px 1fr 78px;
+	grid-template-columns: 1.625rem minmax(0, 1fr) 4.875rem;
 	align-items: center;
 	column-gap: 12px;
-	height: 50px;
+	height: clamp(2.75rem, 4.6vh, 3.125rem);
 	padding: 0 18px 0 18px;
 	border-bottom: 1px solid rgba(13, 63, 122, 0.72);
 	box-sizing: border-box;
@@ -265,7 +266,7 @@ onBeforeUnmount(() => {
 
 /* 右侧第二模块：消息文本 */
 .right-push__message {
-	font-size: 15px;
+	font-size: clamp(0.8rem, 0.86vw, -0.9375rem);
 	line-height: 1.45;
 	white-space: nowrap;
 	overflow: hidden;
@@ -275,7 +276,7 @@ onBeforeUnmount(() => {
 /* 右侧第二模块：时间 */
 .right-push__time {
 	justify-self: end;
-	font-size: 15px;
+	font-size: clamp(0.8rem, 0.86vw, 0.9375rem);
 	color: rgba(229, 241, 255, 0.88);
 }
 
@@ -299,5 +300,24 @@ onBeforeUnmount(() => {
 .right-push__divider {
 	margin-top: 10px;
 	border-bottom: 1px solid #002f5d;
+}
+
+@media (max-height: 980px) {
+	.right-push {
+		margin-top: 4px;
+	}
+
+	.right-push__list-mask {
+		height: clamp(14.25rem, 19vh, 13.5rem);
+	}
+
+	.right-push__item {
+		height: clamp(2.2rem, 3.7vh, 2.5rem);
+		padding: 0 0.875rem;
+	}
+
+	.right-push__divider {
+		margin-top: 6px;
+	}
 }
 </style>

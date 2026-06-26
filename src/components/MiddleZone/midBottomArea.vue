@@ -113,8 +113,8 @@ const handleRegionClick = (payload) => {
 
 <style scoped lang="scss">
 .mid-bottom-area {
-	margin-top: 15px;
-	height: 900px;
+	margin-top: clamp(0.75rem, 1.2vh, 1rem);
+	height: clamp(42rem, 78vh, 56.25rem);
 }
 
 .mid-bottom-area__title {
@@ -122,29 +122,29 @@ const handleRegionClick = (payload) => {
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	height: 48px;
+	height: clamp(2.75rem, 4vh, 3rem);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 100% 100%;
 
 	span {
-		font-size: 24px;
+		font-size: clamp(1.2rem, 0vw, 0rem);
 		font-weight: 700;
 		letter-spacing: 1px;
 		color: #eef8ff;
-		margin-bottom: 22px;
+		margin-bottom: clamp(1.875rem, 1.5vh, 1.375rem);
 		text-shadow: 0 0 10px rgba(61, 182, 255, 0.2);
 	}
 }
 
 .mid-bottom-area__map-shell {
 	position: relative;
-	height: 678px;
-	padding: 10px 28px 0;
+	height: clamp(30rem, 60vh, 42.375rem);
+	padding: clamp(0.5rem, 1vh, 0.75rem) clamp(1rem, 1.8vw, 1.75rem) 0;
 	box-sizing: border-box;
 	background-repeat: no-repeat;
 	background-position: center;
-	background-size: 98% 88%;
+	background-size: 98% 77%;
 }
 
 .mid-bottom-area__legend {
@@ -184,10 +184,11 @@ const handleRegionClick = (payload) => {
 
 .mid-bottom-area__bank-row {
 	display: grid;
-	grid-template-columns: repeat(7, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));
 	align-items: end;
-	column-gap: 18px;
-	padding: 0 130px;
+	column-gap: clamp(0.5rem, 1vw, 1.125rem);
+	row-gap: 0.75rem;
+	padding: 0 clamp(1rem, 6vw, 8.125rem);
 }
 
 .mid-bottom-area__bank-item {
@@ -198,14 +199,14 @@ const handleRegionClick = (payload) => {
 
 .mid-bottom-area__bank-icon {
 	display: block;
-	width: 82px;
-	height: 82px;
+	width: clamp(3.5rem, 4vw, 5.125rem);
+	height: clamp(3.5rem, 4vw, 5.125rem);
 	object-fit: contain;
 }
 
 .mid-bottom-area__bank-label {
-	margin-top: 8px;
-	font-size: 14px;
+	margin-top: 0.5rem;
+	font-size: clamp(0.75rem, 0.85vw, 0.875rem);
 	color: rgba(231, 241, 255, 0.88);
 	text-align: center;
 	white-space: nowrap;

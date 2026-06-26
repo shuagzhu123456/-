@@ -32,10 +32,6 @@ const props = defineProps({
 		default: "",
 	},
 	// 画布样式：允许父层传入缩放等样式
-	canvasStyle: {
-		type: [Object, Array, String],
-		default: () => ({}),
-	},
 });
 
 const emit = defineEmits(["update:title", "update:timeValue", "background-load", "background-error"]);
@@ -72,7 +68,7 @@ const handleBackgroundError = (event) => {
 		<img :src="backgroundSrc" :alt="backgroundAlt" @load="handleBackgroundLoad" @error="handleBackgroundError" />
 	</div>
 
-	<div class="screen-canvas" :style="canvasStyle">
+	<div class="screen-canvas">
 		<header class="screen-header">
 			<div class="screen-header__title">{{ titleModel }}</div>
 
@@ -108,9 +104,9 @@ const handleBackgroundError = (event) => {
 .screen-canvas {
 	position: relative;
 	z-index: 1;
-	width: 1920px;
-	height: 1080px;
-	transform-origin: top center;
+	width: 100%;
+	height: 100%;
+	min-height: 0;
 }
 
 /* 头部容器：约束标题与时间区域的定位 */
@@ -121,13 +117,13 @@ const handleBackgroundError = (event) => {
 /* 主标题：位于头部中轴区域 */
 .screen-header__title {
 	position: absolute;
-	top: 18px;
+	top: clamp(1rem, 1.8vh, 1.25rem);
 	left: 50%;
 	transform: translateX(-50%);
-	font-size: 30px;
+	font-size: clamp(1.5rem, 1.4vw, 1.875rem);
 	font-weight: 700;
 	line-height: 1.2;
-	letter-spacing: 2px;
+	letter-spacing: clamp(0.04rem, 0.12vw, 0.125rem);
 	color: #eef7ff;
 	text-shadow: 0 0 12px rgba(56, 177, 255, 0.28);
 	white-space: nowrap;
@@ -136,12 +132,12 @@ const handleBackgroundError = (event) => {
 /* 时间区域：位于头部右上角 */
 .screen-header__time {
 	position: absolute;
-	top: 26px;
-	right: 5px;
+	top: clamp(1.5rem, 2.4vh, 1.65rem);
+	right: clamp(0.5rem, 0.8vw, 1rem);
 	display: flex;
 	align-items: center;
-	gap: 14px;
-	font-size: 18px;
+	gap: clamp(0.5rem, 0.8vw, 0.875rem);
+	font-size: clamp(0.875rem, 0.95vw, 1.125rem);
 	line-height: 1;
 }
 

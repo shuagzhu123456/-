@@ -71,16 +71,17 @@ const handleImageError = (event) => {
 /* 第一模块容器：承接主图和覆盖文案布局 */
 .left-panel__module {
 	position: relative;
-	width: 460px;
-	height: 249px;
-	margin: 8px auto 0;
+	width: 100%;
+	max-width: 28.75rem;
+	height: clamp(14.5rem, 24vh, 15.5625rem);
+	margin: 0.5rem auto 0;
 }
 
 /* 第一模块标题：位于模块左上角 */
 .left-panel__module-title {
-	height: 28px;
-	margin: 0 0 12px 24px;
-	font-size: 18px;
+	height: 1.75rem;
+	margin: 0 0 0.75rem 1.5rem;
+	font-size: clamp(1rem, 0.95vw, 1.125rem);
 	font-weight: 700;
 	letter-spacing: 1px;
 	color: #68caff;
@@ -90,24 +91,24 @@ const handleImageError = (event) => {
 /* 第一模块主图：按视觉稿比例展示 */
 .left-panel__module-image {
 	display: block;
-	width: 460px;
-	height: 208px;
+	width: 100%;
+	height: calc(100% - 2.5625rem);
 }
 
 /* 第一模块覆盖层：承载流转标签和平台文案 */
 .left-panel__module-copy {
 	position: absolute;
-	top: 40px;
+	top: 2.5rem;
 	left: 0;
-	width: 460px;
-	height: 208px;
+	width: 100%;
+	height: calc(100% - 2.5625rem);
 }
 
 /* 流转标签：复用当前大屏发光文字风格 */
 .left-panel__flow-label {
 	position: absolute;
-	left: 68px;
-	font-size: 18px;
+	left: clamp(3.5rem, 4vw, 4.25rem);
+	font-size: clamp(1rem, 0vw, 0rem);
 	font-weight: 700;
 	line-height: 1;
 	color: #f5fbff;
@@ -115,23 +116,23 @@ const handleImageError = (event) => {
 }
 
 .left-panel__flow-label--finance {
-	top: 15px;
+	top: clamp(0.75rem, 1.4vh, 0.95rem);
 }
 
 .left-panel__flow-label--land-transfer {
-	top: 90px;
+	top: clamp(5rem, 8.5vh, 5.625rem);
 }
 
 .left-panel__flow-label--database {
-	top: 170px;
+	top: clamp(9.5rem, 15.5vh, 10.625rem);
 }
 
 /* 平台文案：固定在主图右下角区域 */
 .left-panel__funnel-label {
 	position: absolute;
-	right: 18px;
-	bottom: 16px;
-	font-size: 17px;
+	right: clamp(0.75rem, 1vw, 1.125rem);
+	bottom: clamp(0.75rem, 1.2vh, 1rem);
+	font-size: clamp(0.95rem, 0.9vw, 1.0625rem);
 	font-weight: 700;
 	line-height: 1;
 	color: #f5fbff;

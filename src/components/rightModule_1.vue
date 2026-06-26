@@ -77,8 +77,9 @@ defineEmits(["row-click"]);
 <style lang="scss" scoped>
 /* 右侧第一模块容器：承载生命周期统计模块布局 */
 .right-lifecycle {
-	width: 474px;
-	margin: 4px auto 0;
+	width: 100%;
+	max-width: 29.625rem;
+	margin: 0.25rem auto 0;
 }
 
 /* 模块标题栏：统一放置三角装饰与标题 */
@@ -101,7 +102,7 @@ defineEmits(["row-click"]);
 }
 
 .right-lifecycle__title-text {
-	font-size: 17px;
+	font-size: clamp(0.95rem, 0.9vw, 1.0625rem);
 	font-weight: 700;
 	letter-spacing: 0.6px;
 	color: #68caff;
@@ -112,10 +113,10 @@ defineEmits(["row-click"]);
 .right-lifecycle__content {
 	display: flex;
 	flex-direction: column;
-	width: 474px;
-	height: 220px;
+	width: 100%;
+	height: clamp(11rem, 20vh, 13.75rem);
 	margin-top: 6px;
-	padding: 4px 0 0 47px;
+	padding: 0.25rem 0 0 clamp(2rem, 2.4vw, 2.9375rem);
 	box-sizing: border-box;
 	background-image: url("@/assets/r-1coen-bj.png");
 	background-repeat: no-repeat;
@@ -127,12 +128,12 @@ defineEmits(["row-click"]);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	height: 53px;
+	height: clamp(2.7rem, 4.8vh, 3.3125rem);
 	cursor: pointer;
 }
 
 .right-lifecycle__label {
-	font-size: 16px;
+	font-size: clamp(0.875rem, 0.9vw, 0rem);
 	font-weight: 700;
 	letter-spacing: 0.2px;
 	color: #f4fbff;
@@ -140,7 +141,7 @@ defineEmits(["row-click"]);
 }
 
 .right-lifecycle__stat {
-	width: 126px;
+	width: clamp(6rem, 7vw, 7.875rem);
 	text-align: left;
 }
 
@@ -152,13 +153,13 @@ defineEmits(["row-click"]);
 	line-height: 1;
 
 	span {
-		font-size: 20px;
+		font-size: clamp(1rem, 1.1vw, 1.25rem);
 		letter-spacing: 0.5px;
 	}
 
 	i {
 		font-style: normal;
-		font-size: 12px;
+		font-size: clamp(0.625rem, 0.7vw, 0.75rem);
 	}
 }
 
@@ -181,7 +182,7 @@ defineEmits(["row-click"]);
 .right-lifecycle__percent {
 	margin-top: 7px;
 	padding-left: 2px;
-	font-size: 12px;
+	font-size: clamp(0.625rem, 0.7vw, 0.75rem);
 	color: rgba(229, 241, 255, 0.78);
 }
 
@@ -196,12 +197,12 @@ defineEmits(["row-click"]);
 
 .right-lifecycle__total-label,
 .right-lifecycle__total-unit {
-	font-size: 17px;
+	font-size: clamp(0.95rem, 0.9vw, 1.0625rem);
 	color: #eef8ff;
 }
 
 .right-lifecycle__total-value {
-	font-size: 20px;
+	font-size: clamp(1rem, 1.1vw, 1.25rem);
 	font-weight: 700;
 	line-height: 1;
 	color: #ffc74c;
@@ -212,5 +213,29 @@ defineEmits(["row-click"]);
 .right-lifecycle__divider {
 	margin-top: 9px;
 	border-bottom: 1px solid #002f5d;
+}
+
+@media (max-height: 980px) {
+	.right-lifecycle {
+		margin-top: 2px;
+	}
+
+	.right-lifecycle__content {
+		height: clamp(10rem, 18vh, 12.25rem);
+		margin-top: 4px;
+		padding-top: 2px;
+	}
+
+	.right-lifecycle__row {
+		height: clamp(2.35rem, 4.1vh, 2.8rem);
+	}
+
+	.right-lifecycle__total {
+		margin-top: 4px;
+	}
+
+	.right-lifecycle__divider {
+		margin-top: 6px;
+	}
 }
 </style>

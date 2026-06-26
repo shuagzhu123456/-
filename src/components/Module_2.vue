@@ -105,12 +105,15 @@ const initChart = () => {
 			{
 				type: "gauge",
 				silent: false,
+				// 控制主仪表盘中心点位置：前一个是左右，后一个是上下
 				center: ["50%", "52%"],
-				radius: "82%",
+				// 控制主仪表盘整体大小：想放大/缩小图表，优先改这里
+				radius: "88%",
 				startAngle: 220,
 				endAngle: -40,
 				progress: {
 					show: true,
+					// 控制蓝色进度环粗细
 					width: 22,
 					roundCap: false,
 					itemStyle: {
@@ -126,6 +129,7 @@ const initChart = () => {
 				pointer: { show: false },
 				axisLine: {
 					lineStyle: {
+						// 控制背景环粗细：一般和 progress.width 一起调整
 						width: 22,
 						color: [[1, "rgba(20, 73, 143, 0.42)"]],
 					},
@@ -140,7 +144,9 @@ const initChart = () => {
 			},
 			{
 				type: "gauge",
+				// 控制外围刻度环中心点位置：通常和主仪表盘保持一致
 				center: ["50%", "52%"],
+				// 控制外围刻度环大小：值越大，外圈离主环越远
 				radius: "101%",
 				startAngle: 220,
 				endAngle: -40,
@@ -148,18 +154,21 @@ const initChart = () => {
 				pointer: { show: false },
 				axisLine: {
 					lineStyle: {
+						// 控制外围细环粗细
 						width: 7,
 						color: [[1, "rgba(23, 96, 189, 0.2)"]],
 					},
 				},
 				axisTick: {
 					show: true,
+					// 控制刻度线离外环的距离
 					distance: -9,
 					splitNumber: 4,
 					lineStyle: {
 						color: "#1a77ff",
 						width: 1,
 					},
+					// 控制刻度线长度
 					length: 4,
 				},
 				splitLine: { show: false },
@@ -217,7 +226,7 @@ watch(
 			initChart();
 		});
 	},
-	{ immediate: true }
+	{ immediate: true },
 );
 
 watch(
@@ -227,7 +236,7 @@ watch(
 			startScroll();
 		});
 	},
-	{ immediate: true, deep: true }
+	{ immediate: true, deep: true },
 );
 
 watch(
@@ -236,7 +245,7 @@ watch(
 		nextTick(() => {
 			initChart();
 		});
-	}
+	},
 );
 
 onBeforeUnmount(() => {
@@ -302,8 +311,9 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 /* 第二模块容器：承接规则引擎监控内容 */
 .rule-monitor {
-	width: 480px;
-	margin: 15px auto 0;
+	width: 100%;
+	max-width: 30rem;
+	margin: 0.9375rem auto 0;
 }
 
 /* 第二模块标题行 */
@@ -327,7 +337,7 @@ onBeforeUnmount(() => {
 
 /* 第二模块标题文字 */
 .rule-monitor__title-text {
-	font-size: 18px;
+	font-size: clamp(1rem, 0.95vw, 1.125rem);
 	font-weight: 700;
 	letter-spacing: 1px;
 	color: #68caff;
@@ -337,16 +347,17 @@ onBeforeUnmount(() => {
 /* 第二模块主体区域：左右布局 */
 .rule-monitor__content {
 	display: grid;
-	grid-template-columns: 214px 1fr;
+	grid-template-columns: minmax(11.5rem, 13.375rem) minmax(0, 1fr);
 	align-items: start;
-	gap: 16px;
-	margin-top: 10px;
+	gap: clamp(0.75rem, 1vw, 1rem);
+	margin-top: 0.625rem;
 }
 
 /* 左侧图表区域 */
 .rule-monitor__chart-area {
 	position: relative;
-	height: 288px;
+	/* 图表区域总高度：图表显示空间不够，先改这里 */
+	height: clamp(16rem, 26vh, 18rem);
 	display: flex;
 	justify-content: center;
 }
@@ -354,25 +365,29 @@ onBeforeUnmount(() => {
 /* 图表视觉容器 */
 .rule-monitor__chart-shell {
 	position: relative;
-	width: 214px;
-	height: 302px;
+	width: 100%;
+	max-width: 13.375rem;
+	/* 图表外层包裹高度：会影响中心文字、底图、状态文案排布 */
+	height: clamp(17rem, 28vh, 18.875rem);
 	display: flex;
 	justify-content: center;
 }
 
 /* ECharts 容器 */
 .rule-monitor__chart {
-	width: 214px;
-	height: 236px;
+	/* ECharts 真正绘制区域：想直接改图表可视大小，重点调这里 */
+	width: 100%;
+	height: clamp(13rem, 22vh, 14.75rem);
 	margin: 0 auto;
 }
 
 /* 图表中心文案 */
 .rule-monitor__chart-center {
 	position: absolute;
-	top: 85px;
+	/* 中间分数字位置：图表大小改完后，文字偏上/偏下就在这里调 */
+	top: clamp(3.75rem, 7vh, 5.3125rem);
 	left: 50%;
-	width: 150px;
+	width: clamp(7.5rem, 8vw, 9.375rem);
 	transform: translateX(-50%);
 	text-align: center;
 	pointer-events: none;
@@ -385,15 +400,15 @@ onBeforeUnmount(() => {
 }
 
 .rule-monitor__score-value {
-	margin-top: 8px;
-	font-size: 40px;
+	margin-top: 0.5rem;
+	font-size: clamp(2rem, 2.1vw, 2.5rem);
 	font-weight: 700;
 	line-height: 1;
 	color: #f8fbff;
 	text-shadow: 0 0 14px rgba(255, 255, 255, 0.16);
 
 	span {
-		font-size: 16px;
+		font-size: clamp(0.875rem, 0.95vw, 1rem);
 	}
 }
 
@@ -401,8 +416,9 @@ onBeforeUnmount(() => {
 .rule-monitor__chart-bottom {
 	position: absolute;
 	left: 50%;
-	bottom: 49px;
-	width: 252px;
+	/* 底部装饰图位置和宽度：图表放大后容易和底图打架，可在这里微调 */
+	bottom: clamp(2.25rem, 4.5vh, 3.0625rem);
+	width: clamp(12rem, 13vw, 15.75rem);
 	transform: translateX(-50%) scale(0.94);
 	transform-origin: center bottom;
 	pointer-events: none;
@@ -410,20 +426,21 @@ onBeforeUnmount(() => {
 
 .rule-monitor__chart-bottom-bg {
 	display: block;
-	width: 252px;
-	height: 257px;
+	width: 100%;
+	height: auto;
 }
 
 /* 数据质量底部状态 */
 .rule-monitor__status {
 	position: absolute;
 	left: 50%;
-	bottom: 90px;
+	/* 底部状态文字位置：通常跟着图表大小一起调 */
+	bottom: clamp(4.25rem, 8vh, 5.625rem);
 	display: flex;
 	align-items: center;
 	gap: 6px;
 	transform: translateX(-50%);
-	font-size: 14px;
+	font-size: clamp(0.75rem, 0.8vw, 0.875rem);
 	font-weight: 700;
 	color: #14ec7d;
 	white-space: nowrap;
@@ -439,8 +456,8 @@ onBeforeUnmount(() => {
 /* 右侧列表区域外框 */
 .rule-monitor__list-panel {
 	position: relative;
-	height: 278px;
-	padding: 12px;
+	height: clamp(15.5rem, 25vh, 17.375rem);
+	padding: 0.75rem;
 	border: 1px solid rgba(29, 125, 255, 0.42);
 	border-radius: 14px;
 	background: rgba(5, 19, 43, 0.32);
@@ -472,7 +489,7 @@ onBeforeUnmount(() => {
 
 /* 时间文本 */
 .rule-monitor__item-time {
-	font-size: 14px;
+	font-size: clamp(0.75rem, 0.8vw, 0.875rem);
 	font-weight: 500;
 	line-height: 1;
 	color: #12f1a1;
@@ -481,7 +498,7 @@ onBeforeUnmount(() => {
 
 /* 列表消息文本 */
 .rule-monitor__item-text {
-	font-size: 14px;
+	font-size: clamp(0.75rem, 0.82vw, -0.125rem);
 	line-height: 1.42;
 	color: rgba(239, 247, 255, 0.84);
 }
@@ -490,5 +507,36 @@ onBeforeUnmount(() => {
 .rule-monitor__divider {
 	margin-top: 12px;
 	border-bottom: 1px solid #002f5d;
+}
+
+@media (max-height: 980px) {
+	.rule-monitor {
+		margin-top: 0.75rem;
+	}
+
+	.rule-monitor__content {
+		gap: 0.75rem;
+	}
+
+	.rule-monitor__chart-area {
+		height: clamp(14rem, 23vh, 16rem);
+	}
+
+	.rule-monitor__chart-shell {
+		height: clamp(16rem, 25vh, 17rem);
+	}
+
+	.rule-monitor__chart {
+		height: clamp(11.75rem, 19vh, 13.25rem);
+	}
+
+	.rule-monitor__list-panel {
+		height: clamp(13.5rem, 22vh, 15rem);
+	}
+
+	.rule-monitor__list-item {
+		min-height: 3.125rem;
+		padding: 0.375rem 0 0.25rem;
+	}
 }
 </style>
