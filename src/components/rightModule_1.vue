@@ -180,7 +180,6 @@ defineEmits(["row-click"]);
 }
 
 .right-lifecycle__percent {
-	margin-top: 7px;
 	padding-left: 2px;
 	font-size: clamp(0.625rem, 0.7vw, 0.75rem);
 	color: rgba(229, 241, 255, 0.78);
@@ -227,7 +226,7 @@ defineEmits(["row-click"]);
 	}
 
 	.right-lifecycle__row {
-		height: clamp(2.35rem, 4.1vh, 2.8rem);
+		height: 2.5rem;
 	}
 
 	.right-lifecycle__total {
