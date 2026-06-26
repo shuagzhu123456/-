@@ -3,8 +3,7 @@ import { GaugeChart } from "echarts/charts";
 import { TooltipComponent } from "echarts/components";
 import { init, use, graphic } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
-import chartBottomBg from "@/assets/echs-but.png";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import chartStatusIcon from "@/assets/dpa.png";
 
 // 只注册当前仪表盘用到的 ECharts 能力，避免整包引入。
@@ -55,11 +54,13 @@ const props = defineProps({
 const emit = defineEmits(["chart-ready"]);
 
 const chartRef = ref(null);
+const chartShellRef = ref(null);
 const listTrackRef = ref(null);
 
 let ruleMonitorChart = null;
 let ruleMonitorScrollFrame = 0;
 let ruleMonitorScrollOffset = 0;
+let chartResizeObserver = null;
 
 const numericScore = computed(() => {
 	const value = Number(props.score);
@@ -184,6 +185,15 @@ const initChart = () => {
 	ruleMonitorChart.resize();
 };
 
+// 统一处理图表尺寸刷新，避免全屏切换或窗口变化时图表错位
+const resizeChart = () => {
+	if (!ruleMonitorChart) {
+		return;
+	}
+
+	ruleMonitorChart.resize();
+};
+
 // 停止列表滚动：切换数据或卸载时统一清理
 const stopScroll = () => {
 	if (ruleMonitorScrollFrame) {
@@ -248,8 +258,27 @@ watch(
 	},
 );
 
+onMounted(() => {
+	window.addEventListener("resize", resizeChart);
+	document.addEventListener("fullscreenchange", resizeChart);
+
+	if (typeof ResizeObserver !== "undefined" && chartShellRef.value) {
+		chartResizeObserver = new ResizeObserver(() => {
+			resizeChart();
+		});
+		chartResizeObserver.observe(chartShellRef.value);
+	}
+});
+
 onBeforeUnmount(() => {
 	stopScroll();
+	window.removeEventListener("resize", resizeChart);
+	document.removeEventListener("fullscreenchange", resizeChart);
+
+	if (chartResizeObserver) {
+		chartResizeObserver.disconnect();
+		chartResizeObserver = null;
+	}
 
 	if (ruleMonitorChart) {
 		ruleMonitorChart.dispose();
@@ -267,7 +296,7 @@ onBeforeUnmount(() => {
 
 		<div class="rule-monitor__content">
 			<div class="rule-monitor__chart-area">
-				<div class="rule-monitor__chart-shell">
+				<div ref="chartShellRef" class="rule-monitor__chart-shell">
 					<div ref="chartRef" class="rule-monitor__chart"></div>
 
 					<div class="rule-monitor__chart-center">
@@ -278,9 +307,7 @@ onBeforeUnmount(() => {
 						</div>
 					</div>
 
-					<div class="rule-monitor__chart-bottom">
-						<img class="rule-monitor__chart-bottom-bg" :src="chartBottomBg" alt="" />
-					</div>
+					<div class="rule-monitor__chart-bottom"></div>
 
 					<div class="rule-monitor__status">
 						<span>{{ statusLabel }}{{ statusText }}</span>
@@ -371,6 +398,7 @@ onBeforeUnmount(() => {
 	height: clamp(17rem, 28vh, 18.875rem);
 	display: flex;
 	justify-content: center;
+	align-items: center;
 }
 
 /* ECharts 容器 */
@@ -385,10 +413,10 @@ onBeforeUnmount(() => {
 .rule-monitor__chart-center {
 	position: absolute;
 	/* 中间分数字位置：图表大小改完后，文字偏上/偏下就在这里调 */
-	top: clamp(3.75rem, 7vh, 5.3125rem);
+	top: 50%;
 	left: 50%;
 	width: clamp(7.5rem, 8vw, 9.375rem);
-	transform: translateX(-50%);
+	transform: translate(-50%, -36%);
 	text-align: center;
 	pointer-events: none;
 }
@@ -417,9 +445,9 @@ onBeforeUnmount(() => {
 	position: absolute;
 	left: 50%;
 	/* 底部装饰图位置和宽度：图表放大后容易和底图打架，可在这里微调 */
-	bottom: clamp(2.25rem, 4.5vh, 3.0625rem);
+	top: 50%;
 	width: clamp(12rem, 13vw, 15.75rem);
-	transform: translateX(-50%) scale(0.94);
+	transform: translate(-50%, 52%) scale(0.94);
 	transform-origin: center bottom;
 	pointer-events: none;
 }
@@ -435,11 +463,11 @@ onBeforeUnmount(() => {
 	position: absolute;
 	left: 50%;
 	/* 底部状态文字位置：通常跟着图表大小一起调 */
-	bottom: clamp(4.25rem, 8vh, 5.625rem);
+	top: 59%;
 	display: flex;
 	align-items: center;
 	gap: 6px;
-	transform: translateX(-50%);
+	transform: translate(-50%, 135%);
 	font-size: clamp(0.75rem, 0.8vw, 0.875rem);
 	font-weight: 700;
 	color: #14ec7d;
